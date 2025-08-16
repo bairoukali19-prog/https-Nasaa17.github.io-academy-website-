@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة نسعى التعليمية - الأستاذ علي بيروك</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        :root {
+            --harvard-crimson: #A41034;
+            --harvard-gray: #545454;
+            --harvard-light: #F8F9FA;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            margin: 0;
+            background: var(--harvard-light);
+            color: var(--harvard-gray);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: var(--harvard-crimson);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .container {
+            padding: 2rem 5%;
+        }
+        
+        /* نظام التسجيل */
+        .auth-section {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        /* واجهة الأستاذ */
+        .professor-dashboard {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+        
+        .tabs button {
+            background: var(--harvard-crimson);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        /* نظام الاختبارات */
+        .quiz-form {
+            margin-top: 20px;
+        }
+        
+        .quiz-form input, 
+        .quiz-form textarea,
+        .quiz-form select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .quiz-form button {
+            background: #2E7D32;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">منصة نسعى</div>
+        <div class="auth-section" id="authSection">
+            <div id="g_id_onload"
+                data-client_id="556820380394-eq1ac3m5100o8m792ak523hdt5lp12cu.apps.googleusercontent.com"
+                data-login_uri="https://your-site.netlify.app"
+                data-callback="handleAuth">
+            </div>
+            <div class="g_id_signin" data-type="standard" data-theme="filled_blue"></div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="studentView">
+            <h2>مرحباً بك في منصة الأستاذ علي بيروك</h2>
+            <p>منصة تعليمية متكاملة للاختبارات والتمارين</p>
+            
+            <div class="courses-grid" id="coursesList">
+                <!-- سيتم ملؤها بالجافاسكريبت -->
+            </div>
+        </section>
+
+        <!-- واجهة الأستاذ -->
+        <section id="professorView" class="professor-dashboard">
+            <h2><i class="fas fa-chalkboard-teacher"></i> لوحة تحكم الأستاذ</h2>
+            
+            <div class="tabs">
+                <button onclick="showTab('addQuiz')">إضافة اختبار</button>
+                <button onclick="showTab('manageExams')">إدارة الامتحانات</button>
+                <button onclick="showTab('studentsResults')">نتائج الطلاب</button>
+            </div>
+            
+            <div id="addQuiz" class="tab-content">
+                <h3>إنشاء اختبار جديد</h3>
+                <form class="quiz-form" id="quizForm">
+                    <input type="text" placeholder="عنوان الاختبار" required>
+                    <select>
+                        <option>اختر المقرر</option>
+                        <option>الرياضيات</option>
+                        <option>الفيزياء</option>
+                    </select>
+                    <textarea placeholder="أسئلة الاختبار (افصل بين الأسئلة بعلامة | )"></textarea>
+                    <button type="submit">حفظ الاختبار</button>
+                </form>
+            </div>
+            
+            <div id="manageExams" class="tab-content" style="display:none;">
+                <h3>الامتحانات الحالية</h3>
+                <div id="examsList"></div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // بيانات الموقع
+        const courses = [
+            { 
+                id: 1, 
+                title: "الرياضيات المتقدمة", 
+                professor: "الأستاذ علي بيروك",
+                quizzes: [
+                    { title: "اختبار منتصف الفصل", date: "2023-10-15" },
+                    { title: "تمارين الوحدة الأولى", date: "2023-09-20" }
+                ]
+            },
+            { 
+                id: 2, 
+                title: "الفيزياء الحديثة", 
+                professor: "الأستاذ علي بيروك",
+                quizzes: []
+            }
+        ];
+
+        // نظام المصادقة
+        function handleAuth(response) {
+            console.log("تم تسجيل الدخول:", response);
+            const userType = confirm("هل أنت أستاذ؟") ? 'professor' : 'student';
+            showUserDashboard(userType);
+            
+            // عرض اسم المستخدم
+            document.getElementById('userName').textContent = response.credential.name;
+        }
+
+        function showUserDashboard(userType) {
+            document.getElementById('authSection').style.display = 'none';
+            
+            if(userType === 'professor') {
+                document.getElementById('professorView').style.display = 'block';
+                loadProfessorData();
+            } else {
+                loadStudentCourses();
+            }
+        }
+
+        function loadProfessorData() {
+            // كود لتحميل بيانات الأستاذ
+            const examsList = document.getElementById('examsList');
+            examsList.innerHTML = courses.map(course => `
+                <div class="course-card">
+                    <h4>${course.title}</h4>
+                    ${course.quizzes.map(quiz => `
+                        <p>${quiz.title} - ${quiz.date}</p>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+
+        // إدارة الاختبارات
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert("تم حفظ الاختبار بنجاح!");
+        });
+    </script>
+</body>
+</html>
