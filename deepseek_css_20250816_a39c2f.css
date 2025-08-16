@@ -1,0 +1,230 @@
+/* التصميم العام - مشابه لتصميم هارفارد */
+:root {
+  --harvard-crimson: #A41034; /* اللون القرمزي الرئيسي */
+  --harvard-dark: #1E1E1E; /* للعناوين */
+  --harvard-gray: #545454; /* للنصوص */
+  --harvard-light: #F8F9FA; /* خلفية الصفحة */
+  --harvard-gold: #FFD700; /* للتأكيدات */
+}
+
+/* الخطوط */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&display=swap');
+
+body {
+  font-family: 'Tajawal', 'Almarai', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--harvard-light);
+  color: var(--harvard-gray);
+  line-height: 1.8;
+  direction: rtl;
+}
+
+/* الهيدر */
+.header {
+  background: var(--harvard-crimson);
+  color: white;
+  padding: 1.5rem 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: white;
+  text-decoration: none;
+}
+
+.logo span {
+  color: var(--harvard-gold);
+}
+
+/* نظام المصادقة */
+.auth-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.g_id_signin iframe {
+  height: 46px !important;
+}
+
+/* المحتوى الرئيسي */
+.main-container {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+
+/* بطاقات المقررات */
+.course-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease;
+  border-right: 4px solid var(--harvard-crimson);
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.course-title {
+  color: var(--harvard-crimson);
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+
+/* واجهة الأستاذ */
+.professor-dashboard {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.dashboard-title {
+  color: var(--harvard-dark);
+  border-bottom: 2px solid var(--harvard-crimson);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+/* تبويبات لوحة التحكم */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+  background: var(--harvard-crimson);
+  color: white;
+}
+
+/* نماذج الإدخال */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--harvard-dark);
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border 0.3s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--harvard-crimson);
+}
+
+.form-textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+/* الأزرار */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: var(--harvard-crimson);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.btn:hover {
+  background: #8a0d2c;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: var(--harvard-gray);
+}
+
+/* نظام الاختبارات */
+.quiz-container {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  border-left: 4px solid var(--harvard-crimson);
+}
+
+.quiz-question {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed #ddd;
+}
+
+/* متجاوب مع الأجهزة المحمولة */
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .auth-section {
+    justify-content: center;
+  }
+  
+  .main-container {
+    padding: 0 1rem;
+  }
+  
+  .tabs {
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+}
